@@ -1,0 +1,11 @@
+def BUILD_NUMBER = project.hasProperty('BUILD_NUMBER') ? "$BUILD_NUMBER" : 'undef'
+version = "0.1.${BUILD_NUMBER}"
+group = "com.kenshoo.${rootProject.name}"
+def projectNickname = "social-regressions"
+
+project.ext {
+    yml = "$rootDir/panda-server/src/main/resources/${rootProject.name}.yml"
+    jarName = "$rootDir/${projectNickname}-server/build/libs/${projectNickname}-server-${version}.jar"
+    mainClass = 'com.kenshoo.panda.infra.dropwizard.ApplicationStartup'
+}
+

@@ -1,0 +1,59 @@
+apply from: 'properties.gradle'
+apply plugin: 'idea'
+apply from: "${rootDir}/dependencies.gradle"
+
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'eu.appsatori:gradle-fatjar-plugin:0.2'
+        classpath 'com.kenshoo:gradle-fpm:+'
+    }
+}
+
+allprojects { project ->
+    apply plugin: 'idea'
+    apply plugin: 'java'
+    apply plugin: 'maven'
+    apply plugin: 'jacoco'
+    apply plugin: 'project-report'
+    apply from: "${rootDir}/compiler-settings.gradle"
+
+    sourceCompatibility = '1.8'
+    targetCompatibility = '1.8'
+    project.version = rootProject.version
+
+    idea {
+        module {
+            jdkName = 1.8
+            inheritOutputDirs = true
+        }
+    }
+    project.extensions.idea.module.iml {
+        withXml {
+            it.asNode().component.find {
+                it.@name == 'NewModuleRootManager'
+            }.@LANGUAGE_LEVEL = "JDK_1_8"
+        }
+    }
+
+    configureJavaCompilers(8)
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.9'
+}
+
+dependencies {
+    compile libraries.junit
+    compile libraries.selenium
+}
+
+idea {
+    project {
+        jdkName = '1.8'
+        languageLevel = '1.8'
+    }
+}
